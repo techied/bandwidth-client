@@ -33,20 +33,19 @@ def run():
 
     @sio.on('iperf3')
     def on_iperf3(data):
-        print('Received iperf for:', data)
         if mac in data:
             print('iperf3')
             stdout = subprocess.run(["iperf3", "-Jc", server_address], capture_output=True, text=True).stdout
             json_obj = json.loads(stdout)
             bits_per_second = json_obj['end']['sum_received']['bits_per_second']
-            print('bits per second: %d' % bits_per_second)
             sio.emit('iperf3 results', {"mac": mac, "bits_per_second": bits_per_second})
 
     @sio.on('webtest')
     def on_webtest(data):
-        print('Received webtest for:', data)
         if mac in data['macs']:
-            print('webtest', data['sites'])
+            print('webtest')
+            results = []
+            total_load_time = 0
             for site in data['sites']:
                 hyperlink = site['url']
                 driver.get(hyperlink)
@@ -58,7 +57,10 @@ def run():
                 fetch_time = driver.execute_script(
                     "return window.performance.timing.responseEnd - window.performance.timing.responseStart")
 
-                print('webtest results', {"mac": mac, "url": site['url'], "performance": fetch_time})
+                results.append({"url": site['url'], "performance": fetch_time})
+                total_load_time += fetch_time
+
+            sio.emit('webtest results', {"mac": mac, "results": results, "totalLoadTime": total_load_time})
 
     @sio.on('client remove')
     def client_remove(data):
