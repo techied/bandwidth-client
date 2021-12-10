@@ -12,6 +12,7 @@ if [[ -v DOWNLOADED ]]; then
       echo "waiting for other package installs to complete..."
       sleep 5
     done
+    apt update
     apt install -y dialog iperf3 chromium-chromedriver python3-pip
     pip3 install -r requirements.txt
     echo "Enter server address"
