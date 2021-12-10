@@ -18,8 +18,6 @@ if [[ -v DOWNLOADED ]]; then
     echo "Enter server address"
     SERVER_ADDRESS=$(dialog --clear --title "Enter server address" --inputbox "Enter the connection address (IP or FQDN for your bandwidth-server)" 15 40 2>&1 >/dev/tty)
 
-    echo "Server address: $SERVER_ADDRESS"
-
     echo "SERVER_ADDRESS=$SERVER_ADDRESS" | tee .env
 
     service="
@@ -44,6 +42,16 @@ if [[ -v DOWNLOADED ]]; then
     sudo systemctl daemon-reload
     sudo systemctl enable bandwidth-client
     sudo systemctl start bandwidth-client
+
+    echo "###############################################################"
+    echo "Installation complete"
+    echo "The MAC address is below"
+    echo "vvvvvvvvvvvv"
+    cat /sys/class/net/eth0/address
+    echo "^^^^^^^^^^^^"
+    echo "Add this MAC address to the server at $SERVER_ADDRESS to use this client"
+    echo "###############################################################"
+
 
     exit 0
   fi
