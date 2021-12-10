@@ -3,6 +3,10 @@
 if [[ -v DOWNLOADED ]]; then
   if [[ $DOWNLOADED == 0 ]]; then
     echo "Download complete"
+    while fuser /var/lib/dpkg/lock >& /dev/null; do
+      echo "waiting for other package installs to complete..."
+      sleep 5
+    done
     apt install -y dialog iperf3 chromium-chromedriver python3-pip
     pip3 install -r requirements.txt
     echo "Enter server address"
