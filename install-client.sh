@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+    echo "Please run this script as root"
+    exit
+fi
+
 if [[ -v DOWNLOADED ]]; then
   if [[ $DOWNLOADED == 0 ]]; then
     echo "Download complete"
