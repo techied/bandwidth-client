@@ -10,8 +10,11 @@ if [[ -v DOWNLOADED ]]; then
     apt install -y dialog iperf3 chromium-chromedriver python3-pip
     pip3 install -r requirements.txt
     echo "Enter server address"
-    CONNECTION_STRING=$(dialog --clear --title "Enter server address" --inputbox "Enter the connection address (IP or FQDN for your bandwidth-server)" 15 40 2>&1 >/dev/tty)
-    echo "Connection string: $CONNECTION_STRING"
+    SERVER_ADDRESS=$(dialog --clear --title "Enter server address" --inputbox "Enter the connection address (IP or FQDN for your bandwidth-server)" 15 40 2>&1 >/dev/tty)
+
+    echo "Server address: $SERVER_ADDRESS"
+
+    echo "SERVER_ADDRESS=$SERVER_ADDRESS" | tee .env
 
     service="
     [Unit]

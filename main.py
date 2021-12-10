@@ -1,9 +1,13 @@
+import os
 from selenium import webdriver
+from dotenv import load_dotenv
 import socketio
 import subprocess
 import json
 
-server_address = '192.168.1.10'
+load_dotenv()
+
+server_address = os.getenv('SERVER_ADDRESS')
 server_port = 3001
 
 
