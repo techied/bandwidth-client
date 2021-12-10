@@ -1,0 +1,37 @@
+name: Upload to Storage
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - id: auth
+        name: Load Google auth credentials
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
+      - id: upload-script
+        name: Upload install script to CDN
+        uses: google-github-actions/upload-cloud-storage@e2673068897289f29bd311609b8ecf0cda0d988c
+        with:
+          path: install-client.sh
+          destination: dl.techied.me/
+          headers: |-
+            Cache-Control: no-cache, no-store, must-revalidate
+      - id: compress
+        name: Compress files
+        run: tar -czf /tmp/latest-client.tar.gz .
+      - id: upload-file
+        name: Upload Latest Build to CDN
+        uses: google-github-actions/upload-cloud-storage@e2673068897289f29bd311609b8ecf0cda0d988c
+        with:
+          path: /tmp/latest-client.tar.gz
+          destination: dl.techied.me/
+          headers: |-
+            Cache-Control: no-cache, no-store, must-revalidate
