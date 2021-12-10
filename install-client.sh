@@ -3,7 +3,7 @@
 if [[ -v DOWNLOADED ]]; then
   if [[ $DOWNLOADED == 0 ]]; then
     echo "Download complete"
-    apt install -y dialog iperf3 chromium-chromedriver
+    apt install -y dialog iperf3 chromium-chromedriver python3-pip
     pip3 install -r requirements.txt
     echo "Enter server address"
     CONNECTION_STRING=$(dialog --clear --title "Enter server address" --inputbox "Enter the connection address (IP or FQDN for your bandwidth-server)" 15 40 2>&1 >/dev/tty)
